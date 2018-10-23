@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mi primer formulario</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<form >
+		<fieldset>
+			<h1>Registro en nuestra tienda</h1>
+
+		<p>
+			<label for="nombre" >Nombre de Usuario</label>
+			<input type="text" id="nombre" placeholder="Su Nombre" autofocus="on" required>
+		</p>
+		<p>
+
+			<label for="Email">Email</label>
+			<input type="email" id="Email" required>
+		</p>
+		<p>	
+			<label for="Edad">Edad</label>
+			<input type="number" id="Edad" required>
+		</p>
+		<p>	
+			<label for="fechaN">Fecha de Nacimiento</label>
+			<input type="date" id="fechaN">
+		</p>
+		<p>	
+			<label for="recomendado">Recomendado POr:</label><br>
+			<select id="recomendado">
+				<option>Google</option>
+				<option>Outlook</option>
+			</select>
+		</p>
+		<p>
+			<label for="comentario">Comentario</label><br>
+			<textarea id="comentario"></textarea>
+		</p>
+		<p>
+			<input type="checkbox" name="acepto" required>
+			<label for="acepto">Acepto los terminos y dcondiciones</label>
+			
+		</p>
+		<p>
+			<input type="submit" name="" value="Enviar">
+		</p>
+			
+		</fieldset>
+	</form>
+
+</body>
+</html>
