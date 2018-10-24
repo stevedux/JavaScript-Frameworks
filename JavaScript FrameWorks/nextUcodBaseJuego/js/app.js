@@ -1,17 +1,17 @@
-var columnaActual = 0;
+var columnaActual = 1;
 
 
 
 ///	CREAR ELEMENTO
-function CrearElemento(x,y){
+function CrearElemento(col,fila){
 
 	var nro = Math.floor(Math.random() * 5);
-	var idEle = "elemento_" + x + "_" + y;
+	//var idEle = "elemento_" + x + "_" + y;
 
 	//CORRECCION 
 	if (nro == 0 || nro > 4){nro = 1}
 
-	var elemento = "<img src='image\\" + nro + ".png' class='elemento' id='" + idEle + "'>"
+	var elemento = "<img src='image\\" + nro + ".png' class='elemento' tipo='" + nro + "' col='" + col + "'>"
 
 	return elemento;
 }
@@ -19,37 +19,61 @@ function CrearElemento(x,y){
 
 function ReiniciarTablero(){
 
-	columnaActual++
-
-	if (columnaActual <= 7){ 
+	for (var col = 0; col < 8; col++) {
 
 		// RELLENO EL TABLERO
-		for (var y = 1; y < 8; y++) {
+		for (var fila = 1; fila < 8; fila++) {
 
-			$(".col-" + columnaActual).append(CrearElemento(columnaActual,y))
+			$(".col-" + col).append(CrearElemento(col,fila))
 
-		}		
+		}	
+	}
+
+	Animar()
+
+	//$(".elemento").on("click", EliminarElemento).draggable()
+	$(".elemento").draggable()
 
 
-		$(".elemento").animate({top: "0px"},1000,function(){
+
+}
+
+
+function Animar(){	
+
+	if (columnaActual <= 7){
+
+		$(".col-" + columnaActual + " .elemento").animate({top: "0px"},500,function(){
 			setTimeout(function() {
-				ReiniciarTablero();
+				columnaActual++
+				Animar();
 			},500);
 				
 		}) 
-
-	}else {
-		//columnaActual = 0;
 	}
+}
+
+function EliminarElemento(){
+
+	//console.log($(this))
+
+	col = $(this).attr("col")
+
+	$(this).fadeOut(function(){
+		$(this).remove(
+			CompletarColumna(col)
+			)})
+	
+	
 }
 
 
 function CompletarColumna(columna){
 
 	// CUENTO LOS ITEMS FALTANTES
-	var faltantes = 7 - $(".col-" + columna + " .elemento").length
+	var faltantes = 8 - $(".col-" + columna + " .elemento").length
 
-	console.log(faltantes)
+	console.log("falt:"+ faltantes)
 
 }
 
@@ -66,27 +90,40 @@ $(function(){
 
 
 	$(".btn-reinicio").on("click", function(){
-		columnaActual = 0
+		columnaActual = 1
 
 		$("div[class^='col']").empty()
 
 		ReiniciarTablero()
 	})
 
+	$(".elemento").droppable({
+      accept: ".elemento",
+
+      drop: function(event, ui){
 
 
-	$(".elemento").on("click", function(){
+      	origen = ui.draggable
+      	destino = $(this)
 
-		console.log($(this))
+      	//$(destino,origen).css({top: "0", left: "0"})
 
-		col = $(this).attr("id")
-		col = col.substring(9, 1);
+      	//destino.before(origen)
 
-		$(this).remove()
 
-		CompletarColumna(col)
 
-	})
+        
+
+        //alert("Correcto!")
+      }
+    })
+
+
+
+
+
+
+
 
 })
 
