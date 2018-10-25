@@ -11,7 +11,7 @@ function CrearElemento(col,fila){
 	//CORRECCION 
 	if (nro == 0 || nro > 4){nro = 1}
 
-	var elemento = "<img src='image\\" + nro + ".png' class='elemento' tipo='" + nro + "' col='" + col + "'>"
+	var elemento = "<img src='image\\" + nro + ".png' class='elemento' tipo='" + nro + "' col='" + col + "' fila='" + fila + "'>"
 
 	return elemento;
 }
@@ -32,7 +32,8 @@ function ReiniciarTablero(){
 	Animar()
 
 	//$(".elemento").on("click", EliminarElemento).draggable()
-	$(".elemento").draggable()
+	$(".elemento").draggable(
+		{ grid: [ 100, 100 ] });
 
 
 
@@ -78,6 +79,62 @@ function CompletarColumna(columna){
 }
 
 
+function cambiarElemento(){
+
+
+	$(".col-1 .elemento")[0].after($(".col-1 .elemento")[6])
+}
+
+
+function asignarDroppable(event, ui){
+
+      	origen = ui.draggable
+      	destino = $(this)
+
+      	origTemp = ui.draggable.clone()
+      	destTemp = $(this).clone()
+
+
+      	//$(destino,origen).css({top: "0", left: "0"})
+
+      	/*console.log($(origen).attr("fila") + " : " + $(origen).attr("col")) 
+      	console.log("<=====>")
+      	console.log($(destino).attr("fila") + " : " + $(destino).attr("col")) 
+
+      	fo = $(origen).attr("fila") - 1
+      	fd = $(destino).attr("fila") - 1*/
+
+                   
+         //$(".col-" + $(origen).attr("col") + " .elemento")[fo].after($(".col-" + $(destino).attr("col") + " .elemento")[fd])           
+      
+         $(origTemp).draggable(
+		{ grid: [ 100, 100 ] }).css({top: "0", left: "0"})
+
+         $(destTemp).draggable(
+		{ grid: [ 100, 100 ] }).css({top: "0", left: "0"})
+
+         $(origTemp).droppable({
+	      accept: ".elemento",
+
+	      drop: asignarDroppable
+	    })
+
+         $(destTemp).droppable({
+	      accept: ".elemento",
+
+	      drop: asignarDroppable
+	    })
+
+
+         origen.replaceWith(destTemp)
+         destino.replaceWith(origTemp)
+
+     
+
+}
+
+
+
 function init(){
 
 	ReiniciarTablero()
@@ -100,24 +157,8 @@ $(function(){
 	$(".elemento").droppable({
       accept: ".elemento",
 
-      drop: function(event, ui){
-
-
-      	origen = ui.draggable
-      	destino = $(this)
-
-      	//$(destino,origen).css({top: "0", left: "0"})
-
-      	//destino.before(origen)
-
-
-
-        
-
-        //alert("Correcto!")
-      }
+      drop: asignarDroppable
     })
-
 
 
 
