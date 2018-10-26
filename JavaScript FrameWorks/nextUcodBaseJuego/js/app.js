@@ -1,17 +1,22 @@
-var columnaActual = 1;
-
 
 
 ///	CREAR ELEMENTO
 function CrearElemento(col,fila){
 
-	var nro = Math.floor(Math.random() * 5);
+	//var nro = Math.floor(Math.random() * 5);
 	//var idEle = "elemento_" + x + "_" + y;
 
 	//CORRECCION 
-	if (nro == 0 || nro > 4){nro = 1}
+	//if (nro == 0 || nro > 4){nro = 1}
 
-	var elemento = "<img src='image\\" + nro + ".png' class='elemento' tipo='" + nro + "' col='" + col + "' fila='" + fila + "'>"
+	do {
+		var nro = Math.floor(Math.random() * 5);
+	}
+	while (nro == 0 || nro > 4);
+
+
+	var elemento = "<img src='image\\" + nro + ".png' class='elemento' tipo='" + nro 
+		+ "' col='" + col + "' fila='" + fila + "' id='" + contadorElementos++ +"'>"
 
 	return elemento;
 }
@@ -44,7 +49,8 @@ function Animar(){
 
 	if (columnaActual <= 7){
 
-		$(".col-" + columnaActual + " .elemento").animate({top: "0px"},500,function(){
+		$(".col-" + columnaActual + " .elemento").animate(
+			{top: "0px"},500,function(){
 			setTimeout(function() {
 				columnaActual++
 				Animar();
@@ -54,7 +60,7 @@ function Animar(){
 	}
 }
 
-function EliminarElemento(){
+/*function EliminarElemento(){
 
 	//console.log($(this))
 
@@ -66,7 +72,7 @@ function EliminarElemento(){
 			)})
 	
 	
-}
+}*/
 
 
 function CompletarColumna(columna){
@@ -79,11 +85,11 @@ function CompletarColumna(columna){
 }
 
 
-function cambiarElemento(){
+/*function cambiarElemento(){
 
 
 	$(".col-1 .elemento")[0].after($(".col-1 .elemento")[6])
-}
+}*/
 
 
 function asignarDroppable(event, ui){
@@ -127,17 +133,129 @@ function asignarDroppable(event, ui){
 
 
          origen.replaceWith(destTemp)
-         destino.replaceWith(origTemp)
+         destino.replaceWith(origTemp)     
 
-     
+}
+
+
+function buscarCoincidencias(){
+
+	var elementosCol = []
+
+
+	//BUSQUEDA VERTICAL /////////////////
+	for (var c = 1; c < 8; c++) {
+
+		var contadorConincidencias = 1
+
+		elementosCol[c] = $(".col-" + c + " img");
+
+		//console.log("===> columna: " + c)
+
+		for (var i = 0; i < 6; i++) {
+			
+			var Comparar = $(elementosCol[c][i]).attr("tipo")
+			var CompararCon = $(elementosCol[c][i+1]).attr("tipo") 
+
+			//console.log(Comparar + " == " + CompararCon)
+
+			if (Comparar == CompararCon){
+				contadorConincidencias++
+
+			}else{
+
+				if (contadorConincidencias >= 3){
+					console.log("Match: col-" + c + " - " + contadorConincidencias)
+				}
+
+				contadorConincidencias = 1
+
+			}
+
+		}
+
+		if (contadorConincidencias >= 3){
+			console.log("Match: col-" + c + " - " + contadorConincidencias)
+		}		
+
+	}
+
+
+	///// BUSQUEDA HORIZONTAL ////
+	for (var f = 0; f < 6; f++) {
+
+		contadorConincidencias = 1
+
+		//console.log("===> Fila: " + f)
+
+		for (var c = 1; c < 7; c++) {
+			
+			var Comparar = $(elementosCol[c][f]).attr("tipo")
+			var CompararCon = $(elementosCol[c+1][f]).attr("tipo") 
+
+			//console.log(Comparar + " == " + CompararCon)
+
+			if (Comparar == CompararCon){
+				contadorConincidencias++
+
+			}else{
+
+				if (contadorConincidencias >= 3){
+					console.log("Match: fila-" + f + " - " + contadorConincidencias)
+				}
+
+				contadorConincidencias = 1
+
+			}
+
+		}
+
+		if (contadorConincidencias >= 3){
+			console.log("Match: fila-" + f + " - " + contadorConincidencias)
+		}	
+
+
+
+	}
+
+
+
 
 }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+var columnaActual = 1;
+var contadorElementos = 1;
+
 function init(){
 
 	ReiniciarTablero()
+
+
+
+
+	$(".elemento").droppable({
+      accept: ".elemento",
+
+      drop: asignarDroppable
+    })
+
+     buscarCoincidencias()
+
+
 
 }
 
@@ -146,26 +264,15 @@ $(function(){
 	init();
 
 
+})
+
+
 	$(".btn-reinicio").on("click", function(){
 		columnaActual = 1
 
 		$("div[class^='col']").empty()
 
-		ReiniciarTablero()
+		init();
 	})
-
-	$(".elemento").droppable({
-      accept: ".elemento",
-
-      drop: asignarDroppable
-    })
-
-
-
-
-
-
-
-})
 
 
