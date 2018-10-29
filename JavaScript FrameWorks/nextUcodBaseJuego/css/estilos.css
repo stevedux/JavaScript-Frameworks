@@ -105,5 +105,6 @@ div[class^='col']{
   height: 96px;
   position: relative;
   top: -580px;
+  border-radius: 15px;
 
 }
