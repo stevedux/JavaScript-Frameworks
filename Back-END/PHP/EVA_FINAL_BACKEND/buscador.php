@@ -16,5 +16,4 @@ $filtroPrecioMax = $rangoPrecios[1];
 echo getInmuebles($_POST["tipo"],$_POST["ciudad"],$filtroPrecioMin,$filtroPrecioMax,$_POST["mostrarTodos"],$datos);
 
 
-
 ?>
